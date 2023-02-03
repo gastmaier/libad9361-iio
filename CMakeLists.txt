@@ -74,9 +74,13 @@ set(INSTALL_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib"
 	CACHE PATH "Installation directory for libraries")
 mark_as_advanced(INSTALL_LIB_DIR)
 
-find_library(LIBIIO_LIBRARIES iio)
-find_path(LIBIIO_INCLUDEDIR iio.h)
-
+find_package(PkgConfig)
+if (PkgConfig_FOUND)
+	pkg_check_modules(LIBIIO libiio)
+else()
+	find_library(LIBIIO_LIBRARIES iio)
+	find_path(LIBIIO_INCLUDEDIR iio.h)
+endif()
 set(LIBAD9361_HEADERS ad9361.h)
 
 file(GLOB_RECURSE FD_SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/filterdesigner/*.c)
